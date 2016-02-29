@@ -69,7 +69,7 @@ setnames(meanStdDatasetWithActivites, names(meanStdDatasetWithActivites), gsub('
 
 #5 From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject
 
-tidyDataset <- meanStdDatasetWithActivites %>% group_by(activityid, activityname, subjectid) %>% summarise_each(funs(mean))
+tidyDataset <- meanStdDatasetWithActivites %>% group_by(subjectid, activityid, activityname) %>% summarise_each(funs(mean))
 
 
 
