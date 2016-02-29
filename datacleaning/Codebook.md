@@ -2,13 +2,13 @@
 
 ###Activities
 
-Activityid       activityname
-1 		 WALKING
-2 		 WALKING_UPSTAIRS
-3 		 WALKING_DOWNSTAIRS
-4 		 SITTING
-5 		 STANDING
-6 		 LAYING
+###Activityid       activityname  
+1 		 WALKING  
+2 		 WALKING_UPSTAIRS  
+3 		 WALKING_DOWNSTAIRS  
+4 		 SITTING  
+5 		 STANDING  
+6 		 LAYING  
 
 ###Each subject has an id tracked by subjectid
 
