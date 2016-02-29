@@ -1,9 +1,9 @@
----
-title: "Data Cleaning Final Project"
-output: html_document
----
-Setup Project variables  
-Load raw training, test, features and subjects datasets
+
+## Title: "Data Cleaning Final Project"
+
+
+###Setup Project variables  
+###Load raw training, test, features and subjects datasets
 
 
 ```r
@@ -56,21 +56,21 @@ testKeys <- cbind(dataSubjectTest, dataYTest)
 testData <- cbind(testKeys, dataXTest)
 ```
 
-1. Merges the training and the test sets to create one data set.
+###Merges the training and the test sets to create one data set.
 
 
 ```r
 dataSet <- rbind(trainData, testData)
 ```
 
-2. Extracts only the measurements on the mean and standard deviation for each measurement.
+###Extracts only the measurements on the mean and standard deviation for each measurement.
 
 
 ```r
 meanStdDataset <- subset(dataSet, select = grep("mean|std|subjectid|activityid", names(dataSet)))
 ```
 
-3. Uses descriptive activity names to name the activities in the data set
+###Uses descriptive activity names to name the activities in the data set
 
 
 ```r
@@ -78,7 +78,7 @@ meanStdDatasetWithActivites <- merge(meanStdDataset, activities, by="activityid"
 meanStdDatasetWithActivites <- select(meanStdDatasetWithActivites, 1:2, 82, 3:81)
 ```
 
-4. Appropriately labels the data set with descriptive variable names.
+###Appropriately labels the data set with descriptive variable names.
 
 
 ```r
@@ -87,7 +87,7 @@ setnames(meanStdDatasetWithActivites, names(meanStdDatasetWithActivites), gsub('
 setnames(meanStdDatasetWithActivites, names(meanStdDatasetWithActivites), gsub('std', "Std", names(meanStdDatasetWithActivites)))
 ```
 
-5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+###From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
 
 ```r
