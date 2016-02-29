@@ -62,41 +62,41 @@ activityname
 - tBodyGyroStdZ                
 
 ###Time Domain Body Gyro Jerk Mean and Std XYZ
--t BodyGyroJerkMeanX          
--t BodyGyroJerkMeanY           
--t BodyGyroJerkMeanZ           
--t BodyGyroJerkStdX            
--t BodyGyroJerkStdY           
--t BodyGyroJerkStdZ            
+- tBodyGyroJerkMeanX          
+- tBodyGyroJerkMeanY           
+- tBodyGyroJerkMeanZ           
+- tBodyGyroJerkStdX            
+- tBodyGyroJerkStdY           
+- tBodyGyroJerkStdZ            
 
 
 ###Time Domain Body Acceleration Magnitude Mean & Std 
--t BodyAccMagMean              
--t BodyAccMagStd 
+- tBodyAccMagMean              
+- tBodyAccMagStd 
 
 ###Time Domain Gravity  Acceleration Magnitude Mean & Std 
--t GravityAccMagMean          
--t GravityAccMagStd            
+- tGravityAccMagMean          
+- tGravityAccMagStd            
 
 ###Time Domain  Acceleration Jerk Magnitude Mean & Std 
--t BodyAccJerkMagMean          
--t BodyAccJerkMagStd 
+- tBodyAccJerkMagMean          
+- tBodyAccJerkMagStd 
 
 ###Time Domain  Body gyro  Magnitude Mean & Std 
--t BodyGyroMagMean            
--t BodyGyroMagStd              
+- tBodyGyroMagMean            
+- tBodyGyroMagStd              
 
 ###Time Domain  Body gyro Jerk Magnitude Mean & Std 
--t BodyGyroJerkMagMean         
--t BodyGyroJerkMagStd          
+- tBodyGyroJerkMagMean         
+- tBodyGyroJerkMagStd          
 
 ###Frequency  Domain Acceleration  Mean & Std  XYZ
 - fBodyAccMeanX               
 - fBodyAccMeanY                
 - fBodyAccMeanZ                
--fBodyAccStdX                 
--fBodyAccStdY                
--fBodyAccStdZ                 
+- fBodyAccStdX                 
+- fBodyAccStdY                
+- fBodyAccStdZ                 
 
 ###Frequency  Domain Body Acceleration  Mean Frequency  XYZ
 - fBodyAccMeanFreqX            
