@@ -89,4 +89,8 @@ tidyDataset <- meanStdDatasetWithActivites %>% group_by(subjectid, activityid, a
 str(tidyDataset)
 ```
 
+###Create tidyDataset.txt file from tidyDataset table
 
+```{r}
+write.table(tidyDataset, "tidyDataset.txt", row.names = FALSE)
+```

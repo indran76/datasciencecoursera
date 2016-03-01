@@ -185,4 +185,9 @@ str(tidyDataset)
 ##  - attr(*, "drop")= logi TRUE
 ```
 
+###Create tidyDataset.txt file from tidyDataset table
 
+
+```r
+write.table(tidyDataset, "tidyDataset.txt", row.names = FALSE)
+```

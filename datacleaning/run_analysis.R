@@ -71,5 +71,7 @@ setnames(meanStdDatasetWithActivites, names(meanStdDatasetWithActivites), gsub('
 
 tidyDataset <- meanStdDatasetWithActivites %>% group_by(subjectid, activityid, activityname) %>% summarise_each(funs(mean))
 
+#Write Dataset to text file
+write.table(tidyDataset, "tidyDataset.txt", row.names = FALSE)
 
 
