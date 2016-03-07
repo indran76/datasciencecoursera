@@ -1,4 +1,3 @@
-setwd("D:\\Classes\\Coursera\\John Hopkins  Data Science\\Practical Machine Learning\\datasciencecoursera\\pml")
 rm(list=ls());
 set.seed(333);
 
