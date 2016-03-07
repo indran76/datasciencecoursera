@@ -1,0 +1,197 @@
+---
+title: "Practical Machine Learning Final Project"
+author: "Merian I Croos"
+date: "March 6, 2016"
+output: html_document
+---
+
+###Objective
+
+The goal of this project is to build a model which accuately predicts whether a person lifted a barbel correctly or incorrectly
+inorder to determine whether a subject is peforming this activity correctly using sensor readings from accelerometers attached to the
+belt, forearm, arm and the dumbell.
+
+This is a classification problem where the outcomes are classified as A-E. Class A corresponds to correctly executing the exercise while
+Class B- Class E are classified as common mistakes.
+
+Several Classification algorithms were  applied to this dataset however only two are documented which produced close enough results
+
+1. Support vector Machine: fast traning but less accurate than Random Forrest
+2. Random Forrect : Slow training but  highly accurate.
+
+###Data
+
+Training Dataset:
+https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv
+
+Testing Dataset:
+https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
+
+
+###Clear workspace and setup the required libraries
+
+```{r}
+rm(list=ls());
+set.seed(333);
+
+suppressMessages(library(caret));
+suppressMessages(library(kernlab));
+suppressMessages(library(ggplot2));
+suppressMessages(library(stats));
+suppressMessages(library(e1071));
+suppressMessages(library(dplyr));
+suppressMessages(library(klaR));
+suppressMessages(library(randomForest));
+```
+
+###Download and Load training/testing datasets
+
+```{r}
+trainingUrl <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"
+testingUrl  <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv"
+
+inTrainData <- read.csv(url(trainingUrl));
+inFinalTestingData <- read.csv(url(testingUrl));
+```
+
+### Filter the dataset to extract only the desired predictors: readings from sensors
+
+```{r}
+colnames <- c("classe", "roll_belt", "pitch_belt",  "yaw_belt", "gyros_belt_x",  "gyros_belt_y", "gyros_belt_z", "accel_belt_x", "accel_belt_y", "accel_belt_z", "magnet_belt_x", "magnet_belt_y", "magnet_belt_z", "roll_arm", "pitch_arm", "yaw_arm", "total_accel_arm", "gyros_arm_y", "gyros_arm_y", "accel_arm_x", "accel_arm_y", "accel_arm_z", "magnet_arm_x", "magnet_arm_y", "magnet_arm_z",  "roll_dumbbell", "pitch_dumbbell", "yaw_dumbbell");
+
+trainFiltered <- dplyr::select(inTrainData, one_of(colnames));
+testFiltered <- dplyr::select(inFinalTestingData, one_of(colnames[-1]));
+
+```
+
+
+
+### Build Cross Validation Set by splitting the dataset 70/30. 30% Reserved for cross validation
+```{r}
+trainDataBuild <- createDataPartition(y=trainFiltered$classe, p=0.7, list = FALSE)
+crossValidationData <- trainFiltered[-trainDataBuild,];
+
+```
+
+### Build training and test datasets 70/30 split training/test from the remaining data partition trainFiltered ( 70% of original)
+```{r}
+buildData <- trainFiltered[trainDataBuild,];
+inTrain <- createDataPartition(y=buildData$classe, p=0.7, list=FALSE)
+
+trainingData <- buildData[inTrain,];
+testingData  <- buildData[-inTrain,]
+```
+
+
+###Preprocess Dataset. Since this is just a classification problem we will just extract and  eliminate highly correlated predictors with cutoff threshold of 90%
+```{r}
+correlated <- cor(trainingData[, -1]);
+highCorr <- findCorrelation(correlated, cutoff = .90)
+highCorr <- highCorr +1;
+
+trainingDataProcessed <- trainingData[, -highCorr];
+
+testingDataProcessed <- testingData[, -highCorr];
+
+crossValidationDataProcessed <- crossValidationData[, -highCorr];
+
+
+dim(trainingDataProcessed)
+
+dim(testingDataProcessed)
+
+dim(crossValidationDataProcessed)
+
+
+```
+
+###Train Support Vector Machine(SVM)
+```{r}
+svmModel <- svm(classe ~., data = trainingDataProcessed);
+```
+
+###Predict using SVM
+```{r}
+svmPrediction <- predict(svmModel, testingDataProcessed, type="classe");
+```
+
+###Confusion Matrix for SVM
+```{r}
+confusionMatrix(testingData$classe, svmPrediction);
+```
+
+###Out of Sample error with test data: SVM
+```{r}
+outOfSampleErrorSVM <- sum(svmPrediction != testingData$classe)/length(svmPrediction)
+outOfSampleErrorSVM
+```
+
+###Cross Validation Test using SVM Model
+```{r}
+svmPredictionCross <- predict(svmModel, crossValidationDataProcessed, type="classe");
+```
+
+
+###Confusion Matrix on Cross validation Test:SVM 
+```{r}
+confusionMatrix(crossValidationDataProcessed$classe, svmPredictionCross);
+```
+
+###Out of Sample error in cross validation dataset: SVM
+```{r}
+outOfSampleErrorSVMCross <- sum(svmPredictionCross != crossValidationDataProcessed$classe)/length(svmPredictionCross)
+outOfSampleErrorSVMCross
+```
+
+##Random Forest Algorithm
+
+###Train Random Forrest
+```{r}
+rfModel <- train(classe~., data=trainingDataProcessed, method="rf", trControl = trainControl(method="cv"), number=4);
+```
+
+###Predict using Random Forrest
+```{r}
+rfPrediction <- predict(rfModel, testingDataProcessed)
+```
+
+###Confusion Matrix for Random Forrest
+```{r}
+confusionMatrix(testingData$classe, rfPrediction);
+```
+
+
+###Out of Sample error with test data: Random Forrest
+```{r}
+outOfSampleErrorRandomForest <- sum(rfPrediction != testingData$classe)/length(rfPrediction)
+outOfSampleErrorRandomForest
+```
+
+###Cross Validation Test using Random Forrest
+```{r}
+rfPredictionCross <- predict(rfModel, crossValidationDataProcessed);
+```
+
+###Confusion Matrix on Cross validation Test: Random Forrest
+```{r}
+confusionMatrix(crossValidationDataProcessed$classe, rfPredictionCross);
+```
+
+###Out of Sample error in cross validation dataset Random Forrest
+```{r}
+outOfSampleErrorRandomForestCross <- sum(rfPredictionCross != crossValidationDataProcessed$classe)/length(rfPredictionCross)
+outOfSampleErrorRandomForestCross
+```
+
+###Random Forrest Accuracy
+```{r, echo=FALSE}
+plot(rfModel, main="Random Forest Accuracy Vs Predictors", ylab="Accuracy", xlab="Predictors")
+```
+
+
+
+##Conclusion
+Random Forrest algorithm produces the best accuracy classifying the dataset with ~97% accuracy rate both on test and cross validation datasets. The out of sample errors is ~2.7% for Random forrest and 16.5% for SVM . Cross validation tests also confirms that Random forrest is a superior model to SVM for classification of this dataset. 
+
+Therefore, for this particular dataset and use case, Random Forrest is the recommended model due to its superior accuracy and low out of sample error rates.
+
